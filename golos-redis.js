@@ -18,10 +18,16 @@ const dynamicSnap = new Promise((resolve, reject) => {
 })
 const FIRSTBLOCK = n => n.head_block_number
 const SENDBLOCK = currentblock => {
-    golos.api.getBlock(currentblock, (err, result) => {if (err) {console.log(err) } else if (result === null){trig.existBlock = false}else {
+    golos.api.getBlock(currentblock, (err, result) => {
+		if (err) {
+			console.log(err) 
+			} 	else if (result === null){
+				trig.existBlock = false
+				}else {
 		let JSONblock = JSON.stringify(result)
 		client.hmset("GolosLastBlock", "data",JSONblock);
 		console.log(JSONblock)
+		trig.existBlock = true
 			}
 	})
 }
@@ -32,6 +38,7 @@ if(trig.existBlock){
 					currentblock++
 				}else{console.warn(`Проблема блока ${currentblock}`)}
 		SENDBLOCK(currentblock)
+	//	trig.existBlock = true
     }, 3000)
 }
 dynamicSnap
